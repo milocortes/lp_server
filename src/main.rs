@@ -43,6 +43,7 @@ fn handle_client(stream: TcpStream) -> Result<(), Error> {
     let mut data = Vec::new();
     let mut stream = BufReader::new(stream);
     
+    println!("Incoming connection from : {}", stream.peer_addr()?);
     
     loop {
         data.clear();
@@ -51,7 +52,6 @@ fn handle_client(stream: TcpStream) -> Result<(), Error> {
         if bytes_read == 0 {
             return Ok(());
         }
-        println!("Incoming connection from : {}", stream.peer_addr()?);
         println!("ID experimento : {}", unsafe { ID_EXPERIMENTO});
         println!("{:?}", chrono::offset::Local::now());
 
