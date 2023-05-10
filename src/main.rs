@@ -39,11 +39,10 @@ struct MessageSerialized {
 static mut ID_EXPERIMENTO: f64= 0.0 ;
 
 fn handle_client(stream: TcpStream) -> Result<(), Error> {
-    //println!("Incoming connection from: {}", stream.peer_addr()?);
+    println!("Incoming connection from: {}", stream.peer_addr()?);
     let mut data = Vec::new();
     let mut stream = BufReader::new(stream);
     
-    println!("Incoming connection from : {}", stream.peer_addr()?);
     
     loop {
         data.clear();
