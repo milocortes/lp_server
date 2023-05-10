@@ -3,6 +3,7 @@ extern crate serde_derive;
 
 extern crate serde;
 extern crate serde_json;
+extern crate chrono;
 
 use std::net::{TcpListener, TcpStream};
 use std::io::{BufRead, BufReader, Error, Write};
@@ -41,7 +42,8 @@ fn handle_client(stream: TcpStream) -> Result<(), Error> {
     //println!("Incoming connection from: {}", stream.peer_addr()?);
     let mut data = Vec::new();
     let mut stream = BufReader::new(stream);
- 
+    
+    
     loop {
         data.clear();
 
@@ -49,8 +51,9 @@ fn handle_client(stream: TcpStream) -> Result<(), Error> {
         if bytes_read == 0 {
             return Ok(());
         }
-        
+        println!("Conexión entrante de : {}", stream.peer_addr()?)
         println!("ID experimento : {}", unsafe { ID_EXPERIMENTO});
+        println!("{:?}", chrono::offset::Local::now());
 
         unsafe { ID_EXPERIMENTO += 1.0};
 
