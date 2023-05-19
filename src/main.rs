@@ -38,28 +38,39 @@ struct MessageSerialized {
 
 static mut ID_EXPERIMENTO: f64= 0.0 ;
 
+
+
 fn handle_client(stream: TcpStream) -> Result<(), Error> {
-    println!("Incoming connection from: {}", stream.peer_addr()?);
-    let mut data = Vec::new();
-    let mut stream = BufReader::new(stream);
     
-    
-    loop {
-        data.clear();
+    let ip_entrante = stream.peer_addr()?.to_string(); 
 
-        let bytes_read = stream.read_until(b'\n', &mut data)?;
-        if bytes_read == 0 {
-            return Ok(());
+    let prueba = ip_entrante.starts_with("10.0.1");
+
+    if prueba{
+        
+        let mut data = Vec::new();
+        let mut stream = BufReader::new(stream);
+        
+        
+        loop {
+            data.clear();
+    
+            let bytes_read = stream.read_until(b'\n', &mut data)?;
+            if bytes_read == 0 {
+                return Ok(());
+            }
+            println!("Incoming connection from: {}", ip_entrante);
+            println!("ID experimento : {}", unsafe { ID_EXPERIMENTO});
+            println!("{:?}", chrono::offset::Local::now());
+    
+            unsafe { ID_EXPERIMENTO += 1.0};
+    
+            unsafe { write!(stream.get_mut(), "{}", &ID_EXPERIMENTO)?};
+            write!(stream.get_mut(), "{}", "\n")?;
         }
-        println!("ID experimento : {}", unsafe { ID_EXPERIMENTO});
-        println!("{:?}", chrono::offset::Local::now());
-
-        unsafe { ID_EXPERIMENTO += 1.0};
-
-        //write!(stream.get_mut(), "{}", f64::from(value))?;
-        unsafe { write!(stream.get_mut(), "{}", &ID_EXPERIMENTO)?};
-        write!(stream.get_mut(), "{}", "\n")?;
-    }
+    } else{
+        return Ok(());
+    };
 }
 
 fn main() {
